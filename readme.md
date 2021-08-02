@@ -64,7 +64,7 @@ const app = express();
 app.set('view engine', 'ejs');
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended:  true }));
 app.use(express.static("public"));
 
 app.listen(3000, function() {
@@ -95,10 +95,35 @@ const  articleSchema = {
 };
 
 const Article = mongoose.model("Article", articleSchema);
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
-});
 ```
 
-Mongo automatically changes the "Article" to "articles" with its algorithm.
+**Mongo automatically changes the "Article" to "articles" with its algorithm.**
+
+## RESTful
+
+![RESTful table](./files/restful_table.png)
+
+**In order to make our API RESTful, we're going to go through this table and create each of these routes.**
+
+## GET Route
+
+file: app.js
+line:22-30
+code:
+```javascript
+app.get("/articles", function(req,res){
+  Article.find(function(err, foundArticles) {
+    if(!err){
+      res.send(foundArticles);
+    } else {
+      res.send(err);
+    }
+  })
+})
+```
+This finds all of the documents in the articles collection and sends it back.
+
+If there aren't any errors, you can see the documents at http://localhost:3000/articles
+
+For a better viewing experience install this chrome extension called **JSON Viewer Pro**: 
+https://chrome.google.com/webstore/detail/json-viewer-pro/eifflpmocdbdmepbjaopkkhbfmdgijcc/
