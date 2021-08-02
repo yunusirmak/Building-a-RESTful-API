@@ -72,3 +72,33 @@ app.listen(3000, function() {
 });
 ```
 
+**5) Setup MongoDB**
+
+ - DB name is **wikiDB**
+ - Collection name is **articles**
+ - Document has 2 fields: **title** and **content**
+
+file: app.js
+line:5
+code:
+```javascript
+mongoose.connect('mongodb://localhost:27017/wikiDB', {useNewUrlParser:  true, useUnifiedTopology:  true});
+```
+
+file: app.js
+line:15-24
+code:
+```javascript
+const  articleSchema = {
+	name:  String,
+  content: String
+};
+
+const Article = mongoose.model("Article", articleSchema);
+
+app.listen(3000, function() {
+  console.log("Server started on port 3000");
+});
+```
+
+Mongo automatically changes the "Article" to "articles" with its algorithm.
