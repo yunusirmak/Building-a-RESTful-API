@@ -127,3 +127,58 @@ If there aren't any errors, you can see the documents at http://localhost:3000/a
 
 For a better viewing experience install this chrome extension called **JSON Viewer Pro**: 
 https://chrome.google.com/webstore/detail/json-viewer-pro/eifflpmocdbdmepbjaopkkhbfmdgijcc/
+
+## POST Route
+
+To test posting, we can download **Postman** from
+https://www.postman.com/downloads/
+
+file: app.js
+line:32-35
+code:
+```javascript
+app.post("/articles", function(req,res) {
+  console.log(req.body.title);
+  console.log(req.body.content);
+})
+```
+now we need to open up Postman and see if we can console log some inputs.
+
+![Postman](./files/postman1.png)
+
+Create a new **POST request** in Postman.
+
+Insert our **localhost:3000/articles** url.
+
+Choose **Body** and choose **x-www-form-urlencoded**
+
+Type in **title** and **content** keys and their values.
+
+Click on SEND.
+
+![Hyper result](./files/hyper_result.png)
+
+And as we can see on the console, it logged our post request.
+
+Now we can refactor our code like this to send that data into the database.
+
+file: app.js
+line:32-45
+code:
+```javascript
+app.post("/articles", function(req,res) {
+
+  const newArticle= new Article({
+    title: req.body.title,
+    content: req.body.content
+  })
+  newArticle.save(function(err) {
+    if(!err){
+      res.send("Successfully added a new article.")
+    }else{
+      res.send(err);
+    }
+  });
+})
+```
+After sending the same thing from Postman, this time it saves it into our wikiDB.
