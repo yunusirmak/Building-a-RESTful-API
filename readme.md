@@ -160,8 +160,6 @@ Click on SEND.
 
 And as we can see on the console, it logged our post request.
 
-Now we can refactor our code like this to send that data into the database.
-
 file: app.js
 line:32-45
 code:
@@ -181,4 +179,26 @@ app.post("/articles", function(req,res) {
   });
 })
 ```
+Now we can refactor our code like this to send that data into the database.
+
 After sending the same thing from Postman, this time it saves it into our wikiDB.
+
+## Delete Route
+
+file: app.js
+line:47-55
+code:
+```javascript
+app.delete("/articles", function(req,res) {
+  Article.deleteMany(function(err) {
+    if(!err){
+      res.send("Successfully deleted all articles.");
+    } else{
+      res.send(err);
+    }
+  })
+})
+```
+After saving this code, choose the delete option in Postman and SEND.
+
+**This will delete all of the documents so you might want to copy them before deleting.**
