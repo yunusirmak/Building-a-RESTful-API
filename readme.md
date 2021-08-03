@@ -183,7 +183,7 @@ Now we can refactor our code like this to send that data into the database.
 
 After sending the same thing from Postman, this time it saves it into our wikiDB.
 
-## Delete Route
+## DELETE Route
 
 file: app.js
 line:47-55
@@ -202,3 +202,65 @@ app.delete("/articles", function(req,res) {
 After saving this code, choose the delete option in Postman and SEND.
 
 **This will delete all of the documents so you might want to copy them before deleting.**
+
+## Chainable Route
+
+Here is an example of chained route handlers that are defined by using `app.route()`.
+
+```javascript
+app.route('/book')
+  .get(function (req, res) {
+    res.send('Get a random book')
+  })
+  .post(function (req, res) {
+    res.send('Add a book')
+  })
+  .put(function (req, res) {
+    res.send('Update the book')
+  })
+```
+
+Here is our code after using the chained routes.
+
+file: app.js
+line:22-55
+code:
+```javascript
+app.route("/articles")
+  .get(function(req,res){
+    Article.find(function(err, foundArticles) {
+      if(!err){
+        res.send(foundArticles);
+      } else {
+        res.send(err);
+      }
+    })
+  })
+  
+  .post(function(req,res) {
+
+    const newArticle= new Article({
+      title: req.body.title,
+      content: req.body.content
+    })
+    newArticle.save(function(err) {
+      if(!err){
+        res.send("Successfully added a new article.")
+      }else{
+        res.send(err);
+      }
+    });
+  })
+  
+  .delete(function(req,res) {
+    Article.deleteMany(function(err) {
+      if(!err){
+        res.send("Successfully deleted all articles.");
+      } else{
+        res.send(err);
+      }
+    })
+  })
+
+```
+
