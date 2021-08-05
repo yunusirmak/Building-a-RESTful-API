@@ -370,6 +370,8 @@ Using the **req.body** it gets whatever we want to change automatically.
 
 ![Robo DOM](./files/dom.png)
 
+**Postman;**
+
 ![PATCH Postman](./files/postman3.png)
 
 **We have only changed the title of the document.**
@@ -404,3 +406,25 @@ Using the **req.body** it gets whatever we want to change automatically.
     "title" : "API changed",
     "content" : "API stands for Application Programming Interface."
     }
+
+## DELETE a Specific Document
+
+**Find the corresponding title from the URL and delete it.**
+
+file: app.js
+line:97-107
+code:
+```javascript
+    .delete(function(req,res) {
+      Article.deleteOne(
+        {title: req.params.articleTitle},
+        function(err) {
+        if(!err){
+          res.send("Successfully deleted the article.");
+        } else{
+          res.send(err);
+        }
+      })
+    });
+```
+Sending a **DELETE request** on the URL **localhost:3000/articles/API** would delete our **API document**
