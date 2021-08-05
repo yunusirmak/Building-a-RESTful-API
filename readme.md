@@ -333,14 +333,74 @@ This finds the document that has the title value of our specifed url.
 
 After finding the document, it will set the new title and content values.
 
+**Postman;**
+
 ![PUT Postman](./files/postman2.png)
 
-**⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️**
+**Sent a PUT request that changes the title and content**
+
+**⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️**
 
 ![PUT Robo3T](./files/robo_put.png)
 
-Our Jack Bauer document got updated and it become Chuck Norris.
+**Our Jack Bauer document got updated and it become Chuck Norris.**
+
 
 ## PATCH(Update) a Specific Document
 
+file: app.js
+line:83-95
+code:
+```javascript
+    .patch(function(req,res) {
+      Article.updateMany(
+        {title: req.params.articleTitle},
+        {$set: req.body},
+        function(err) {
+          if(!err){
+            res.send("Successfully updated article. (PATCH)");
+          } else{
+            res.send(err);
+          }
+        }
+      );
+    });
+```
+Using the **req.body** it gets whatever we want to change automatically.
 
+![Robo DOM](./files/dom.png)
+
+![PATCH Postman](./files/postman3.png)
+
+**We have only changed the title of the document.**
+
+**⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️**
+
+![Robo Document](./files/document.png)
+
+## Difference between PUT and PATCH
+
+**PUT wants to update by changing the whole document but PATCH only updates the given parameters.**
+
+    {
+    "_id" : ObjectId("5c139771d79ac8eac11e754a"),
+    "title" : "API",
+    "content" : "API stands for Application Programming Interface."
+    }
+***Let's say we have this document.***
+
+**If we send a PUT request that only wants to change the title, content will be set to NULL.**
+
+    {
+    "_id" : ObjectId("5c139771d79ac8eac11e754a"),
+    "title" : "API changed",
+    "content" : NULL
+    }
+
+**However, if we send a PATCH request that only wants to change the title, content will remain the same.**
+
+    {
+    "_id" : ObjectId("5c139771d79ac8eac11e754a"),
+    "title" : "API changed",
+    "content" : "API stands for Application Programming Interface."
+    }

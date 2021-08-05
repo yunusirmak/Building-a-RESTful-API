@@ -69,6 +69,7 @@ app.route("/articles")
       Article.updateMany(
         {title: req.params.articleTitle},
         {$set: {title: req.body.title, content: req.body.content} },
+        //{multi: true, upsert: false, overwrite: true}, //<----Use these if there are any errors.
         function(err) {
           if(!err){
             res.send("Successfully updated article. (PUT)");
@@ -85,7 +86,7 @@ app.route("/articles")
         {$set: req.body},
         function(err) {
           if(!err){
-            res.send("Successfully updated article...");
+            res.send("Successfully updated article. (PATCH)");
           } else{
             res.send(err);
           }
