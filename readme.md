@@ -90,8 +90,8 @@ line:15-24
 code:
 ```javascript
 const  articleSchema = {
-	name:  String,
-  content: String
+	title:  String,
+	content: String
 };
 
 const Article = mongoose.model("Article", articleSchema);
@@ -260,7 +260,87 @@ app.route("/articles")
         res.send(err);
       }
     })
-  })
+  });
 
 ```
+## GET a Specific Article
+
+In order to get a specific title, we must first give our url a custom name and call that name in the function to see if it matches up.
+
+file: app.js
+line:56-66
+code:
+```javascript
+  app.route("/articles/:articleTitle")
+  .get(function(req,res) {
+    Article.findOne({title: req.params.articleTitle}, function(err, foundArticle) {
+      if(!err){
+        res.send(foundArticle)
+      }else(
+        res.send("No articles matching that title was found.")
+      )
+    });
+  });
+```
+
+After saving this code and sending a **GET request** from **Postman** on the URL **localhost:3000/articles/REST** , we get this output;
+
+    {
+        "_id": "5c18e1892998bdb3b3d355bf",
+        "title": "REST",
+        "content": "REST is short for REpresentational State Transfer. IIt's an architectural style for designing APIs."
+    }
+
+## URL's with spaces
+
+If we're looking for a title name with spaces in it like **"Jack Bauer"**, we must put **%20** instead of the **space**. 
+
+**"Jack Bauer" ----> "Jack%20Bauer"**
+
+You can look at the HTML URL Encoding References here:
+
+https://www.w3schools.com/tags/ref_urlencode.ASP
+
+So in our example, the URL would be;
+
+**localhost:3000/articles/Jack%20Bauer**
+
+## PUT(Update) a Specific Document
+
+file: app.js
+line:68-81
+code:
+```javascript
+    .put(function(req,res) {
+      Article.updateMany(
+        {title: req.params.articleTitle},
+        {$set: {title: req.body.title, content: req.body.content} },
+        //{multi: true, upsert: false, overwrite: true}, //<----Use these if there are any errors.
+        function(err) {
+          if(!err){
+            res.send("Successfully updated article. (PUT)");
+          }
+        }
+
+      )
+      
+    })
+```
+
+This finds the document that has the title value of our specifed url.
+
+**localhost:3000/articles/Jack%20Bauer ---> It will find the document that has the title value of "Jack Bauer"**
+
+After finding the document, it will set the new title and content values.
+
+![PUT Postman](./files/postman2.png)
+
+**⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️⬇️**
+
+![PUT Robo3T](./files/robo_put.png)
+
+Our Jack Bauer document got updated and it become Chuck Norris.
+
+## PATCH(Update) a Specific Document
+
 
